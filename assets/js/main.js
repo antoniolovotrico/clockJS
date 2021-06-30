@@ -1,25 +1,30 @@
-window.addEventListener("keydown", function (e) {
-  // selezioniamo l'audio che ha come data attribute il keyCode del tasto che abbiamo cliccato.
-  const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
-  // selezioniamo il div di classe .key che ha come data attribute il keyCode del tasto che abbiamo cliccato.
-  const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
-  // aggiungo la classe play all'elemento cliccato
-  key.classList.add("play");
-  // seleziono tutti i tasti con classe .key
-  const keys = document.querySelectorAll(".key");
-  console.log(keys);
-  // ciclo all'interno della node list keys e per ogni key che ha effettuato la transizione eseguo una funzione che rimuove la transizione.
-  for (const key of keys) {
-    key.addEventListener("transitionend", (element) => {
-      if (element.propertyName !== "transform") {
-        return;
-      }
-      key.classList.remove("play");
-    });
-  }
-  if (!audio) {
-    return; //stop function
-  }
-  audio.currentTime = 0; // questo permette di stoppare l'audio immediatamente e farlo ripartire ad ogni pressione del tasto
-  audio.play();
-});
+const secondHand = document.querySelector(".second");
+const minuteHand = document.querySelector(".minute");
+const hourHand = document.querySelector(".hour");
+
+function setDate() {
+  const now = new Date();
+
+  // Lancetta dei secondi
+  const seconds = now.getSeconds();
+  const secondsDeg =
+    (seconds / 60) * 360 +
+    90; /* questo passaggio converte i secondi in scala 360 */
+  secondHand.style.transform = `rotate(${secondsDeg}deg)`;
+
+  // Lancetta dei minuti
+  const minutes = now.getMinutes();
+  const minutesDeg =
+    (minutes / 60) * 360 +
+    90; /* questo passaggio converte i minuti in scala 360  */
+  minuteHand.style.transform = `rotate(${minutesDeg}deg)`;
+
+  // Lancetta delle ore
+  const hours = now.getHours();
+  const hoursDeg =
+    (hours / 12) * 360 +
+    90; /* questo passaggio converte le ore in scala 360  */
+  hourHand.style.transform = `rotate(${hoursDeg}deg)`;
+}
+
+setInterval(setDate, 1000);
